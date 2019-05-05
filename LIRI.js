@@ -29,21 +29,18 @@ function getSpotify() {
 	var keys = require('./keys.js');
 	var spotify = new Spotify(keys.spotify);
 
-	spotify.search({ type: 'track', query: searchItem, limit: 1 }, function(err, data) {
+	spotify.search({ type: 'track', query: searchItem }, function(err, data) {
 		if (err) {
 			return console.log('Error occurred: ' + err);
 		}
 
-		console.log(
-			data.tracks.items[0].artists +
-				'\n' +
-				data.tracks.items[0].name +
-				'\n' +
-				data.tracks.items[0].preview_url +
-				'\n' +
-				data.tracks.items[0] +
-				'\n'
-		);
+		for (let i = 0; i < data.tracks.items.length; i++) {
+			console.log(
+				`\nArtist: ${data.tracks.items[i].artists[0].name}\nSong: ${data.tracks.items[i].name}\nPreview: ${
+					data.tracks.items[i].preview_url
+				}\nAlbum: ${data.tracks.items[i].album.name} (${data.tracks.items[i].album.album_type})\n\n----------------`
+			);
+		}
 	});
 }
 
