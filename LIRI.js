@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+var fs = require('fs');
 var axios = require('axios');
 var moment = require('moment');
 var command = process.argv[2];
@@ -48,21 +48,53 @@ function getSpotify() {
 
 function getOMDB() {
 	axios.get('http://www.omdbapi.com/?apikey=trilogy&t=' + searchItem).then(function(response) {
-		console.log(`TITLE:  ${response.data.Title}\nRELEASED:  ${response.data.Released}\nIMDb RATING:  ${response.data.imdbRating}\nROTTEN TOMATOES:  ${response.data.Ratings[1].Value}\nCOUNTRY:  ${response.data.Country}\nLANGUAGE:  ${response.data.Language}\nPLOT:  ${response.data.Plot}\nSTARRING:  ${response.data.Actors}`);
+		console.log(
+			`TITLE:  ${response.data.Title}\nRELEASED:  ${response.data.Released}\nIMDb RATING:  ${
+				response.data.imdbRating
+			}\nROTTEN TOMATOES:  ${response.data.Ratings[1].Value}\nCOUNTRY:  ${response.data.Country}\nLANGUAGE:  ${
+				response.data.Language
+			}\nPLOT:  ${response.data.Plot}\nSTARRING:  ${response.data.Actors}`
+		);
 	});
 }
 
-switch (command) {
-	case 'concert-this':
-		getBIT();
-		break;
-	case 'spotify-this-song':
-		getSpotify();
-		break;
-	case 'movie-this':
-		getOMDB();
-		break;
-	case 'do-what-it-says':
-		// code block
-		break;
+function getRandom() {
+	fs.readFile('random.txt', 'utf8', function(error, data) {
+		if (error) {
+			return console.log(error);
+		}
+
+		var dataArr = data.split(', ');
+		console.log(dataArr);
+		command = dataArr[0];
+		searchItem = dataArr[1];
+		runSwitch();
+	});
 }
+
+function runSwitch() {
+	switch (command) {
+		case 'concert-this':
+			getBIT();
+			break;
+		case 'spotify-this-song':
+			if (searchItem == '') {
+				searchItem = 'The Sign';
+			}
+			getSpotify();
+			break;
+		case 'movie-this':
+			if (searchItem == '') {
+				searchItem = 'Mr. Nobody';
+			} else {
+				searchItem = searchItem;
+			}
+			getOMDB();
+			break;
+		case 'do-what-it-says':
+			getRandom();
+			break;
+	}
+}
+
+runSwitch();
