@@ -38,13 +38,19 @@ function getSpotify() {
 			console.log(
 				`\nArtist: ${data.tracks.items[i].artists[0].name}\nSong: ${data.tracks.items[i].name}\nPreview: ${
 					data.tracks.items[i].preview_url
-				}\nAlbum: ${data.tracks.items[i].album.name} (${data.tracks.items[i].album.album_type})\n\n----------------`
+				}\nAlbum: ${data.tracks.items[i].album.name} (${
+					data.tracks.items[i].album.album_type
+				})\n\n----------------`
 			);
 		}
 	});
 }
 
-function getOMDB() {}
+function getOMDB() {
+	axios.get('http://www.omdbapi.com/?apikey=trilogy&t=' + searchItem).then(function(response) {
+		console.log(`TITLE:  ${response.data.Title}\nRELEASED:  ${response.data.Released}\nIMDb RATING:  ${response.data.imdbRating}\nROTTEN TOMATOES:  ${response.data.Ratings[1].Value}\nCOUNTRY:  ${response.data.Country}\nLANGUAGE:  ${response.data.Language}\nPLOT:  ${response.data.Plot}\nSTARRING:  ${response.data.Actors}`);
+	});
+}
 
 switch (command) {
 	case 'concert-this':
