@@ -9,18 +9,19 @@ function getBIT() {
 	axios
 		.get('https://rest.bandsintown.com/artists/' + searchItem + '/events?app_id=codingbootcamp')
 		.then(function(response) {
-
-            //for (let i = 0; i < response.length; i++) {
-
-                console.log(response.data[0].venue.name + '\n'
-                        + response.data[0].venue.city + ', ' + response.data[0].venue.country + '\n'
-                        + moment(response.data[0].datetime).format('L') );
-            //} 
-            }
-        )
+			for (let i = 0; i < response.data.length; i++) {
+				console.log(
+					`\nVenue: ${response.data[i].venue.name}\nCity: ${response.data[i].venue.city}, ${
+						response.data[i].venue.region
+					} ${response.data[i].venue.country}\nDate: ${moment(response.data[i].datetime).format(
+						'L'
+					)}\n\n----------------`
+				);
+			}
+		})
 		.catch(function(error) {
-            console.log(error);}
-        );
+			console.log(error);
+		});
 }
 
 function getSpotify() {
@@ -33,7 +34,16 @@ function getSpotify() {
 			return console.log('Error occurred: ' + err);
 		}
 
-		console.log(data);
+		console.log(
+			data.tracks.items[0].artists +
+				'\n' +
+				data.tracks.items[0].name +
+				'\n' +
+				data.tracks.items[0].preview_url +
+				'\n' +
+				data.tracks.items[0] +
+				'\n'
+		);
 	});
 }
 
